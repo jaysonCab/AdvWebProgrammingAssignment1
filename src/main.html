@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jayson Cabrera Assignment 1</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <button id="geolocate">Find Me! </button>
+    <div>
+        Longitude: <span id="longitude"></span></div>
+    </div>
+
+
+    <script>
+        
+        function showPosition(Position)
+        {
+            const longitude = document.getElementById('longitude');
+            longitude.innerHTML = Position.coords.longitude;
+        }
+
+        function handleFindMe()
+        {
+            navigator.geolocation.getCurrentPosition(showPosition)
+        }
+
+        const find_me = document.getElementById('geolocate');
+        find_me.addEventListener('click', handleFindMe);
+
+    </script>
+
+
+
+
+
+    <div id=''>
+        <input type='file' id='imageInput' accept="image/*">
+    </div>
+
+    <div id="'gallery">
+        <p> insert </p>
+    </div>
+</body>
+</html>
