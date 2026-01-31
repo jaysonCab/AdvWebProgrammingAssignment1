@@ -46,7 +46,8 @@
     </div>
 
 -->
-    
+    <h1>Jayson Cabrera Assignment 1</h1> <br>
+
     <div id="map"></div>
 
     <script
@@ -128,9 +129,10 @@
                 const infoWindow = new google.maps.InfoWindow({ content: contentString });
 
                 marker.addListener("click", () => {
-                infoWindow.open({ anchor: marker, map });
+                    infoWindow.open({ anchor: marker, map });
                 });
-                }
+                addLandmarkCard(title, description, imageURL, marker);
+            }
 
           });
         }
@@ -172,6 +174,7 @@
                     });
                 }
             );
+            addLandmarkCard(title, description, imageURL, HardCodeLocation);
         }     
     
         const locationInsert = document.getElementById("locationInsert");
@@ -181,6 +184,41 @@
         nice.addEventListener("click", handleLongLatInsert);
     
       </script>
+
+    <script>
+        const markers = [];
+        
+        function addLandmarkCard(title, description, imageURL, marker) {
+            const list = document.getElementById("landmarkList");
+        
+            const card = document.createElement("div");
+            card.className = "landmarkCard";
+        
+            card.innerHTML = `
+            <h4>${title}</h4>
+            <p>${description}</p>
+            ${imageURL ? `<img src="${imageURL}" style="max-width:120px;">` : ""}
+            <button class="removeBtn">Remove</button>
+            `;
+        
+            // 🔥 REMOVE landmark (DOM + map)
+            card.querySelector(".removeBtn").addEventListener("click", (e) => {
+            e.stopPropagation();   // prevent other click events
+            card.remove();         // removes DOM element
+            marker.map = null;     // removes marker from map
+            });
+        
+            // Optional UX: click card → zoom to marker
+            card.addEventListener("click", () => {
+            map.panTo(marker.position);
+            map.setZoom(14);
+            });
+        
+            list.appendChild(card);
+        }
+    </script>
+    
+    <div id="landmarkList"></div>
 
 </body>
 </html>

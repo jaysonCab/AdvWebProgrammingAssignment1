@@ -11,3 +11,14 @@
     display: flex;
     gap: 50px;
 }
+
+#landmarkList {
+    display: flex;
+    gap: 10px;
+  }
+  
+.landmarkCard {
+    border: 1px solid #ccc;
+    padding: 8px;
+    background: #fff;
+}
