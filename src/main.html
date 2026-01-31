@@ -7,46 +7,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
-<!--     
-    <button id="geolocate">Find Me! </button>
-    <div>
-        Longitude: <span id="longitude"></span></div>
-    </div>
 
-    <script>
-        
-        function handleError(error)
-        {
-            console.log(error);
-        }
-
-        function showPosition(position)
-        {
-            const longitude = document.getElementById('longitude');
-            longitude.innerHTML = position.coords.longitude;
-        }
-
-        function handleFindMe()
-        {
-            navigator.geolocation.getCurrentPosition(showPosition, handleError);
-        }
-
-        const find_me = document.getElementById('geolocate');
-        find_me.addEventListener('click', handleFindMe);
-
-    </script>
-
-    <div id='imageInsert'>
-        <input type='file' id='imageInput' accept="image/*">
-    </div>
-
-    <div id="'gallery">
-        <p> insert </p>
-    </div>
-
--->
     <h1>Jayson Cabrera Assignment 1</h1> <br>
+    <div id="landmarkList"></div>
 
     <div id="map"></div>
 
@@ -129,10 +92,9 @@
                 const infoWindow = new google.maps.InfoWindow({ content: contentString });
 
                 marker.addListener("click", () => {
-                    infoWindow.open({ anchor: marker, map });
+                infoWindow.open({ anchor: marker, map });
                 });
-                addLandmarkCard(title, description, imageURL, marker);
-            }
+                }
 
           });
         }
@@ -174,7 +136,6 @@
                     });
                 }
             );
-            addLandmarkCard(title, description, imageURL, HardCodeLocation);
         }     
     
         const locationInsert = document.getElementById("locationInsert");
@@ -201,14 +162,13 @@
             <button class="removeBtn">Remove</button>
             `;
         
-            // 🔥 REMOVE landmark (DOM + map)
             card.querySelector(".removeBtn").addEventListener("click", (e) => {
-            e.stopPropagation();   // prevent other click events
-            card.remove();         // removes DOM element
-            marker.map = null;     // removes marker from map
+            e.stopPropagation();
+            card.remove();
+            marker.map = null;
             });
-        
-            // Optional UX: click card → zoom to marker
+            
+            // Zooms into card when clicked
             card.addEventListener("click", () => {
             map.panTo(marker.position);
             map.setZoom(14);
@@ -217,8 +177,6 @@
             list.appendChild(card);
         }
     </script>
-    
-    <div id="landmarkList"></div>
 
 </body>
 </html>
