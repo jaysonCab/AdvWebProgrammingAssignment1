@@ -7,92 +7,144 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class='EntirePage'>
+        <h1>Jayson Cabrera Assignment 1</h1> <br>
+        <div id="landmarkList"></div>
 
-    <h1>Jayson Cabrera Assignment 1</h1> <br>
-    <div id="landmarkList"></div>
+        <div id="map"></div>
 
-    <div id="map"></div>
+        <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFdu_2EiV-tSpN1gtwyyPTfnLmeXYRQ4Q&callback=initMap&v=weekly&libraries=marker"
+        defer
+        ></script>
 
-    <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFdu_2EiV-tSpN1gtwyyPTfnLmeXYRQ4Q&callback=initMap&v=weekly&libraries=marker"
-    defer
-    ></script>
-
-    <div class="DescriptionBox">
-        <div>
-            <p>Please Fill In These Descriptions For Your Marker !</p>
-            <input id="title" type="text" placeholder="Title"> <br>
-            <input id="description" type="text" placeholder="Description">
-            <p>Insert an Image: </p> <input id='imageInput' type='file' accept="image/*">
-        </div>
-        <div>
-            <p>How would you like to insert the marker? Do one or the other: </p>
-            <div class="markerContainer">
-                <div>
-                    <button id="locationInsert">Insert Address Location:</button> <br>
-                    <label for="address">Address:</label>
-                    <input id="address" type="text" />
-                </div>
-                <div>
-                    <button id="lngLatLocationInsert">Insert Lng/Lat Location</button> <br>
-                    <input id="lat" type="text" placeholder="Latitude">
-                    <input id="lng" type="text" placeholder="Longitude">
+        <div class="DescriptionBox">
+            <div>
+                <p>Please Fill In These Descriptions For Your Marker !</p>
+                <input id="title" type="text" placeholder="Title"> <br>
+                <input id="description" type="text" placeholder="Description">
+                <p>Insert an Image: </p> <input id='imageInput' type='file' accept="image/*">
+            </div>
+            <hr>
+            <div>
+                <p>How would you like to insert the marker? Do one or the other: </p>
+                <div class="markerContainer">
+                    <div>
+                        <button id="locationInsert">Insert Address Location:</button> <br>
+                        <label for="address">Address:</label>
+                        <input id="address" type="text" />
+                    </div>
+                    <div>
+                        <button id="lngLatLocationInsert">Insert Lng/Lat Location</button> <br>
+                        <input id="lat" type="text" placeholder="Latitude">
+                        <input id="lng" type="text" placeholder="Longitude">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        let map;
-        let geocoder;
-        let HardCodeLocation;
-        
-        function initMap()
-        {
-            map = new google.maps.Map(document.getElementById("map"), 
+        <script>
+            let map;
+            let geocoder;
+            let HardCodeLocation;
+            
+            function initMap()
             {
-                center: {lat: 43.2375, lng: -79.8341},
-                zoom: 10,
-                mapId: "5e28d7621cb50c7a7d8374b3"
-            });  
+                map = new google.maps.Map(document.getElementById("map"), 
+                {
+                    center: {lat: 43.2375, lng: -79.8341},
+                    zoom: 10,
+                    mapId: "5e28d7621cb50c7a7d8374b3"
+                });  
 
-            geocoder = new google.maps.Geocoder()
-        }
+                geocoder = new google.maps.Geocoder()
+            }
+            
+            function handleNameLocationInsert()
+            {
         
-        function handleNameLocationInsert()
-        {
-    
-          const address = document.getElementById("address").value;
-    
-          geocoder.geocode( {address: address}, function(results, status) {
-    
-            if (status == "OK") {
+            const address = document.getElementById("address").value;
+        
+            geocoder.geocode( {address: address}, function(results, status) {
+        
+                if (status == "OK") {
 
-                const marker = new google.maps.marker.AdvancedMarkerElement({
-                map: map,
-                position: {
-                    lat: results[0].geometry.location.lat(),
-                    lng: results[0].geometry.location.lng()
-                },
-                title: "Your Location"
+                    const marker = new google.maps.marker.AdvancedMarkerElement({
+                    map: map,
+                    position: {
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng()
+                    },
+                    title: "Your Location"
+                    });
+
+                    const title = document.getElementById("title").value;
+                    const description = document.getElementById("description").value;
+
+                    const imageInput = document.getElementById("imageInput");
+                    const imageFile = imageInput.files[0];
+                    const imageURL = imageFile ? URL.createObjectURL(imageFile) : "";
+
+                    const contentString =
+                    (imageURL ? `<img src="${imageURL}" style="max-width:30px; height:auto;">` : "") +
+                    `<h3>${title}</h3>` +
+                    `<p>${description}</p>`;
+
+                    const infoWindow = new google.maps.InfoWindow({ content: contentString });
+                    let card;
+
+                    marker.addListener("click", () => {
+                        if (!card) return;
+
+                        const title = card.querySelector("h4").textContent;
+                        const description = card.querySelector("p").textContent;
+                        const img = card.querySelector("img");
+
+                        infoWindow.setContent(
+                            (img ? `<img src="${img.src}" style="max-width:30px;">` : "") +
+                            `<h3>${title}</h3><p>${description}</p>`
+                        );
+                        infoWindow.open({ anchor: marker, map });
+                    });
+
+                    
+                    card = addLandmarkCard(title, description, imageURL, marker);
+                    }
+            });
+            }
+
+            function handleLongLatInsert()
+            {
+                const lat = parseFloat(document.getElementById("lat").value);
+                const lng = parseFloat(document.getElementById("lng").value);
+
+                HardCodeLocation = new google.maps.marker.AdvancedMarkerElement({
+                    map: map,
+                    position: {lat: lat, lng: lng},
+                    title: "Some Location"
                 });
 
                 const title = document.getElementById("title").value;
                 const description = document.getElementById("description").value;
-
-                const imageInput = document.getElementById("imageInput");
                 const imageFile = imageInput.files[0];
-                const imageURL = imageFile ? URL.createObjectURL(imageFile) : "";
+                let imageURL = '';
+
+                if (imageFile) {
+                    imageURL = URL.createObjectURL(imageFile);
+                }
 
                 const contentString =
-                (imageURL ? `<img src="${imageURL}" style="max-width:30px; height:auto;">` : "") +
+                `<img src="${imageURL}" style="max-width:30px; height:auto;">` +
                 `<h3>${title}</h3>` +
                 `<p>${description}</p>`;
 
-                const infoWindow = new google.maps.InfoWindow({ content: contentString });
+                const infoWindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
                 let card;
 
-                marker.addListener("click", () => {
+                HardCodeLocation.addListener("click", function () {
                     if (!card) return;
 
                     const title = card.querySelector("h4").textContent;
@@ -100,126 +152,91 @@
                     const img = card.querySelector("img");
 
                     infoWindow.setContent(
-                        (img ? `<img src="${img.src}" style="max-width:30px;">` : "") +
+                        (img ? `<img src="${img.src}" style="max-width:30px; height:auto;">` : "") +
                         `<h3>${title}</h3><p>${description}</p>`
                     );
-                    infoWindow.open({ anchor: marker, map });
+
+                    infoWindow.open({
+                        anchor: HardCodeLocation,
+                        shouldFocus: false
+                    });
                 });
 
-                
-                card = addLandmarkCard(title, description, imageURL, marker);
-                }
-          });
-        }
+                card = addLandmarkCard(title, description, imageURL, HardCodeLocation);
+            }     
+        
+            const locationInsert = document.getElementById("locationInsert");
+            locationInsert.addEventListener("click", handleNameLocationInsert);
 
-        function handleLongLatInsert()
-        {
-            const lat = parseFloat(document.getElementById("lat").value);
-            const lng = parseFloat(document.getElementById("lng").value);
+            const nice = document.getElementById("lngLatLocationInsert");
+            nice.addEventListener("click", handleLongLatInsert);
+        
+        </script>
 
-            HardCodeLocation = new google.maps.marker.AdvancedMarkerElement({
-                map: map,
-                position: {lat: lat, lng: lng},
-                title: "Some Location"
-            });
-
-            const title = document.getElementById("title").value;
-            const description = document.getElementById("description").value;
-            const imageFile = imageInput.files[0];
-            let imageURL = "";
-            if (imageFile) {
-                imageURL = URL.createObjectURL(imageFile);
+        <script>
+            function setActiveCard(card) {
+                document.querySelectorAll(".landmarkCard.active").forEach(c => c.classList.remove("active"));
+                if (card) card.classList.add("active");
             }
 
-            const contentString =
-            `<img src="${imageURL}" style="max-width:30px; height:auto;">` +
-            `<h3>${title}</h3>` +
-            `<p>${description}</p>`;
-
-            const infoWindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-
-            let card;
-
-            HardCodeLocation.addListener("click", function () {
-                if (!card) return;
-
-                const title = card.querySelector("h4").textContent;
-                const description = card.querySelector("p").textContent;
-                const img = card.querySelector("img");
-
-                infoWindow.setContent(
-                    (img ? `<img src="${img.src}" style="max-width:30px; height:auto;">` : "") +
-                    `<h3>${title}</h3><p>${description}</p>`
-                );
-
-                infoWindow.open({
-                    anchor: HardCodeLocation,
-                    shouldFocus: false
+            const markers = [];
+            
+            function addLandmarkCard(title, description, imageURL, marker) {
+                const list = document.getElementById("landmarkList");
+            
+                const card = document.createElement("div");
+                card.className = "landmarkCard";
+            
+                card.innerHTML = `
+                <h4>${title}</h4>
+                <p>${description}</p>
+                ${imageURL ? `<img src="${imageURL}" style="max-width:120px;">` : ""}
+                <button class="editBtn">Edit</button>
+                <button class="removeBtn">Remove</button>
+                `;
+            
+                card.querySelector(".removeBtn").addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    card.remove();
+                    marker.map = null;
                 });
-            });
 
-            card = addLandmarkCard(title, description, imageURL, HardCodeLocation);
-        }     
-    
-        const locationInsert = document.getElementById("locationInsert");
-        locationInsert.addEventListener("click", handleNameLocationInsert);
-
-        const nice = document.getElementById("lngLatLocationInsert");
-        nice.addEventListener("click", handleLongLatInsert);
-    
-      </script>
-
-    <script>
-        const markers = [];
-        
-        function addLandmarkCard(title, description, imageURL, marker) {
-            const list = document.getElementById("landmarkList");
-        
-            const card = document.createElement("div");
-            card.className = "landmarkCard";
-        
-            card.innerHTML = `
-            <h4>${title}</h4>
-            <p>${description}</p>
-            ${imageURL ? `<img src="${imageURL}" style="max-width:120px;">` : ""}
-            <button class="editBtn">Edit</button>
-            <button class="removeBtn">Remove</button>
-            `;
-        
-            card.querySelector(".removeBtn").addEventListener("click", (e) => {
+                card.querySelector(".editBtn").addEventListener("click", (e) => {
                 e.stopPropagation();
-                card.remove();
-                marker.map = null;
-            });
 
-            card.querySelector(".editBtn").addEventListener("click", (e) => {
-            e.stopPropagation();
+                const newTitle = prompt("New title:", title);
+                if (newTitle !== null) {
+                    card.querySelector("h4").textContent = newTitle;
+                }
 
-            const newTitle = prompt("New title:", title);
-            if (newTitle !== null) {
-                card.querySelector("h4").textContent = newTitle;
-            }
+                const newDesc = prompt("New description:", description);
+                if (newDesc !== null) {
+                    card.querySelector("p").textContent = newDesc;
+                }
+                });
 
-            const newDesc = prompt("New description:", description);
-            if (newDesc !== null) {
-                card.querySelector("p").textContent = newDesc;
-            }
-            });
+                card.addEventListener("click", () => {
+                    setActiveCard(card);
+                    map.panTo(marker.position);
+                    map.setZoom(14);
+                });
 
+                // ✅ B) Clicking the MARKER highlights its CARD
+                marker.addListener("click", () => {
+                    setActiveCard(card);
+                    card.scrollIntoView({ behavior: "smooth", block: "nearest" }); // optional nice touch
+                });
+
+                // Zooms into card when clicked
+                card.addEventListener("click", () => {
+                map.panTo(marker.position);
+                map.setZoom(14);
+                });
             
-            
-            // Zooms into card when clicked
-            card.addEventListener("click", () => {
-            map.panTo(marker.position);
-            map.setZoom(14);
-            });
-        
-            list.appendChild(card);
-            return card;
-        }
-    </script>
-
+                list.appendChild(card);
+                return card;
+            }
+        </script>
+    </div>
 </body>
 </html>

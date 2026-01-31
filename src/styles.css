@@ -19,6 +19,43 @@
   
 .landmarkCard {
     border: 1px solid #ccc;
-    padding: 8px;
-    background: #fff;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.landmarkCard.active {
+    border-color: #2b7cff;
+    background: rgba(43, 124, 255, 0.12);
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.EntirePage {
+    width: 710px;
+    margin: 0 auto;
+}
+
+.EntirePage h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.DescriptionBox {
+    text-align: center;
+}
+
+.DescriptionBox input {
+    display: block;
+    margin: 8px auto;
+}
+
+.markerContainer {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
 }
