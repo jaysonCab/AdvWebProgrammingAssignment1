@@ -221,10 +221,9 @@
                     map.setZoom(14);
                 });
 
-                // ✅ B) Clicking the MARKER highlights its CARD
                 marker.addListener("click", () => {
                     setActiveCard(card);
-                    card.scrollIntoView({ behavior: "smooth", block: "nearest" }); // optional nice touch
+                    card.scrollIntoView({ behavior: "smooth", block: "nearest" });
                 });
 
                 // Zooms into card when clicked
