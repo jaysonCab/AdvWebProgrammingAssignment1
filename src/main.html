@@ -90,12 +90,24 @@
                 `<p>${description}</p>`;
 
                 const infoWindow = new google.maps.InfoWindow({ content: contentString });
+                let card;
 
                 marker.addListener("click", () => {
+                    if (!card) return;
+
+                    const title = card.querySelector("h4").textContent;
+                    const description = card.querySelector("p").textContent;
+                    const img = card.querySelector("img");
+
+                    infoWindow.setContent(
+                        (img ? `<img src="${img.src}" style="max-width:30px;">` : "") +
+                        `<h3>${title}</h3><p>${description}</p>`
+                    );
                     infoWindow.open({ anchor: marker, map });
                 });
 
-                addLandmarkCard(title, description, imageURL, marker);
+                
+                card = addLandmarkCard(title, description, imageURL, marker);
                 }
           });
         }
@@ -127,17 +139,28 @@
             const infoWindow = new google.maps.InfoWindow({
                 content: contentString
             });
-            
-            HardCodeLocation.addListener("click",
-                function()
-                {
-                    infoWindow.open ({
-                        anchor: HardCodeLocation,
-                        shouldFocus: false
-                    });
-                }
-            );
-            addLandmarkCard(title, description, imageURL, HardCodeLocation);
+
+            let card;
+
+            HardCodeLocation.addListener("click", function () {
+                if (!card) return;
+
+                const title = card.querySelector("h4").textContent;
+                const description = card.querySelector("p").textContent;
+                const img = card.querySelector("img");
+
+                infoWindow.setContent(
+                    (img ? `<img src="${img.src}" style="max-width:30px; height:auto;">` : "") +
+                    `<h3>${title}</h3><p>${description}</p>`
+                );
+
+                infoWindow.open({
+                    anchor: HardCodeLocation,
+                    shouldFocus: false
+                });
+            });
+
+            card = addLandmarkCard(title, description, imageURL, HardCodeLocation);
         }     
     
         const locationInsert = document.getElementById("locationInsert");
@@ -161,14 +184,31 @@
             <h4>${title}</h4>
             <p>${description}</p>
             ${imageURL ? `<img src="${imageURL}" style="max-width:120px;">` : ""}
+            <button class="editBtn">Edit</button>
             <button class="removeBtn">Remove</button>
             `;
         
             card.querySelector(".removeBtn").addEventListener("click", (e) => {
-            e.stopPropagation();
-            card.remove();
-            marker.map = null;
+                e.stopPropagation();
+                card.remove();
+                marker.map = null;
             });
+
+            card.querySelector(".editBtn").addEventListener("click", (e) => {
+            e.stopPropagation();
+
+            const newTitle = prompt("New title:", title);
+            if (newTitle !== null) {
+                card.querySelector("h4").textContent = newTitle;
+            }
+
+            const newDesc = prompt("New description:", description);
+            if (newDesc !== null) {
+                card.querySelector("p").textContent = newDesc;
+            }
+            });
+
+            
             
             // Zooms into card when clicked
             card.addEventListener("click", () => {
@@ -177,6 +217,7 @@
             });
         
             list.appendChild(card);
+            return card;
         }
     </script>
 
