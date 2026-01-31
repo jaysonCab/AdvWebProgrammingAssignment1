@@ -92,10 +92,11 @@
                 const infoWindow = new google.maps.InfoWindow({ content: contentString });
 
                 marker.addListener("click", () => {
-                infoWindow.open({ anchor: marker, map });
+                    infoWindow.open({ anchor: marker, map });
                 });
-                }
 
+                addLandmarkCard(title, description, imageURL, marker);
+                }
           });
         }
 
@@ -136,6 +137,7 @@
                     });
                 }
             );
+            addLandmarkCard(title, description, imageURL, HardCodeLocation);
         }     
     
         const locationInsert = document.getElementById("locationInsert");
