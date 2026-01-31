@@ -1,0 +1,13 @@
+The biggest thing I've learned from this project is the capabilities of Javascript within a web application allowing
+you to dynamically change the page without having to reload the page. I've built my own website prior to this,
+https://jaysoncabrera.ca/. I thought the extent of Javascript was simply animations and not related to inputs or
+listeners, I thought if you wanted dynamic page information you required a PHP front end application. without
+even a map on place, I was testing out the initial Javascript code shown in class on reading my location in commit
+hash 662e153267654732be74ccf9734383283f0d0a08. From here, you could retrieve the users location and be able to
+dynamically display on screen.
+
+On a more technical end, one thing that was difficult to manage was edits within the requirements. During commit
+a3315ae587df284c401cb9301e8af912d1c771d6, having to reference already created markers was a difficult task but
+incredily useful to know. When adding a landmark card, I am creating an object with specific values so when I decide
+to edit the entire object, it already knows what pointers to look at. It doesn't search through a list to find what the
+gallery item is referencing, it already knows its reference.
