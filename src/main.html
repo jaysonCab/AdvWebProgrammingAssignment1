@@ -1,3 +1,73 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Map</title>
+  <style>
+    #map {
+      height: 500px;
+      width: 700px;
+    }
+
+    #address {
+      width: 300px; 
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <br />
+  <button id="find_me">Find Me</button>
+  <label for="address">Address:</label>
+  <input id="address" type="text" />
+
+
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFdu_2EiV-tSpN1gtwyyPTfnLmeXYRQ4Q&callback=initMap&v=weekly&libraries=marker"
+    defer
+    ></script>
+  <script>
+
+    function initMap()
+    {
+        map = new google.maps.Map(document.getElementById("map"), 
+          {
+            center: {lat: 43.2375, lng: -79.8341},
+            zoom: 12,
+            mapId: "5e28d7621cb50c7a7d8374b3"
+          });
+
+        geocoder = new google.maps.Geocoder();
+    }
+
+    function handleFindMe()
+    {
+
+      const address = document.getElementById("address").value;
+
+      geocoder.geocode( {address: address}, function(results, status) {
+
+        if (status == "OK")
+        {
+          new google.maps.marker.AdvancedMarkerElement({
+            map: map,
+            position: {lat: results[0].geometry.location.lat(), 
+                       lng: results[0].geometry.location.lng()},
+            title: "Your Location"
+          });
+        }
+      });
+
+    }
+
+    const find_me = document.getElementById("find_me");
+    find_me.addEventListener("click", handleFindMe);
+
+  </script>
+</body>
+</html> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,17 +120,52 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFdu_2EiV-tSpN1gtwyyPTfnLmeXYRQ4Q&callback=initMap&v=weekly&libraries=marker"
     defer
     ></script>
+
+
+
+    <button id="locationInsert">Insert Location</button>
+    <label for="address">Address:</label>
+    <input id="address" type="text" />
     <script>
+
         function initMap()
         {
-        map = new google.maps.Map(document.getElementById("map"),
-            {
-                center: {lat:43.2375, lng: -79.8341},
+            map = new google.maps.Map(document.getElementById("map"), 
+              {
+                center: {lat: 43.2375, lng: -79.8341},
                 zoom: 12,
                 mapId: "5e28d7621cb50c7a7d8374b3"
-            });
+              });
+    
+            geocoder = new google.maps.Geocoder();
         }
+    
+        function handleLocationInsert()
+        {
+    
+          const address = document.getElementById("address").value;
+    
+          geocoder.geocode( {address: address}, function(results, status) {
+    
+            if (status == "OK")
+            {
+              new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: {lat: results[0].geometry.location.lat(), 
+                           lng: results[0].geometry.location.lng()},
+                title: "Your Location"
+              });
+            }
+          });
+    
+        }
+    
+        const locationInsert = document.getElementById("locationInsert");
+        locationInsert.addEventListener("click", handleLocationInsert);
+    
+      </script>
 
-    </script>
 </body>
 </html>
+
+<!-- 1:10:00 talked about inputting description and shit -->
