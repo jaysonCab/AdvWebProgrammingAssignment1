@@ -6,3 +6,8 @@
     height: 500px;
     width: 700px;
 }
+
+.markerContainer {
+    display: flex;
+    gap: 50px;
+}

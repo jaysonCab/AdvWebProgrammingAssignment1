@@ -62,7 +62,7 @@
             <p>Insert an Image: </p> <input id='imageInput' type='file' accept="image/*">
         </div>
         <div>
-            <p>How would you like to insert the marker? Do one or the other: </p>
+            <p>How would you like to insert the marker?</p>
             <div class="markerContainer">
                 <div>
                     <button id="locationInsert">Insert Address Location:</button> <br>
@@ -102,36 +102,15 @@
     
           geocoder.geocode( {address: address}, function(results, status) {
     
-            if (status == "OK") {
-
-                const marker = new google.maps.marker.AdvancedMarkerElement({
+            if (status == "OK")
+            {
+              new google.maps.marker.AdvancedMarkerElement({
                 map: map,
-                position: {
-                    lat: results[0].geometry.location.lat(),
-                    lng: results[0].geometry.location.lng()
-                },
+                position: {lat: results[0].geometry.location.lat(), 
+                           lng: results[0].geometry.location.lng()},
                 title: "Your Location"
-                });
-
-                const title = document.getElementById("title").value;
-                const description = document.getElementById("description").value;
-
-                const imageInput = document.getElementById("imageInput");
-                const imageFile = imageInput.files[0];
-                const imageURL = imageFile ? URL.createObjectURL(imageFile) : "";
-
-                const contentString =
-                (imageURL ? `<img src="${imageURL}" style="max-width:30px; height:auto;">` : "") +
-                `<h3>${title}</h3>` +
-                `<p>${description}</p>`;
-
-                const infoWindow = new google.maps.InfoWindow({ content: contentString });
-
-                marker.addListener("click", () => {
-                infoWindow.open({ anchor: marker, map });
-                });
-                }
-
+              });
+            }
           });
         }
 
@@ -155,9 +134,9 @@
             }
 
             const contentString =
-            `<img src="${imageURL}" style="max-width:30px; height:auto;">` +
             `<h3>${title}</h3>` +
-            `<p>${description}</p>`;
+            `<p>${description}</p>`; 
+            // `<img src='${imageFile}'>`;
 
             const infoWindow = new google.maps.InfoWindow({
                 content: contentString
