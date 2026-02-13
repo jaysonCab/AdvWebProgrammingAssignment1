@@ -23,7 +23,8 @@
                 <p>Please Fill In These Descriptions For Your Marker !</p>
                 <input id="title" type="text" placeholder="Title"> <br>
                 <input id="description" type="text" placeholder="Description">
-                <p>Insert an Image: </p> <input id='imageInput' type='file' accept="image/*">
+                <p>Insert an Image: </p> <input id='imageInput' type='file' accept="image/*"> <br>
+                <button id="geoLocationInsert">Use My Current Location</button>
             </div>
             <hr>
             <div>
@@ -165,11 +166,55 @@
                 card = addLandmarkCard(title, description, imageURL, HardCodeLocation);
             }     
         
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(success, geoError);
+                } else {
+                    alert("Geolocation is not supported by this browser.");
+                }
+            }
+
+            function success(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                const marker = new google.maps.marker.AdvancedMarkerElement({
+                    map: map,
+                    position: { lat: lat, lng: lng },
+                    title: "My Location"
+                });
+
+                const title = document.getElementById("title").value;
+                const description = document.getElementById("description").value;
+
+                const imageInput = document.getElementById("imageInput");
+                const imageFile = imageInput.files[0];
+                const imageURL = imageFile ? URL.createObjectURL(imageFile) : "";
+
+                const infoWindow = new google.maps.InfoWindow({
+                    content:
+                    (imageURL ? `<img src="${imageURL}" style="max-width:30px;">` : "") +
+                    `<h3>${title}</h3><p>${description}</p>`
+                });
+
+                let card = addLandmarkCard(title, description, imageURL, marker);
+
+                marker.addListener("click", () => {
+                    infoWindow.open({ anchor: marker, map });
+                });
+            }
+
+            function geoError() {
+                alert("Sorry, no position available.");
+            }
+
             const locationInsert = document.getElementById("locationInsert");
             locationInsert.addEventListener("click", handleNameLocationInsert);
 
             const nice = document.getElementById("lngLatLocationInsert");
             nice.addEventListener("click", handleLongLatInsert);
+
+            document.getElementById("geoLocationInsert").addEventListener("click", getLocation);
         
         </script>
 
